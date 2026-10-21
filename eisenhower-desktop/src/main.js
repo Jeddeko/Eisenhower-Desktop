@@ -49,6 +49,21 @@ if (localStorage.getItem('theme') === 'light') {
     btnTheme.textContent = '🌙';
 }
 
+// --- INICIAR SESIÓN CON ENTER ---
+passwordInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        btnLogin.click();
+    }
+});
+
+emailInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        passwordInput.focus();
+    }
+});
+
 // --- PERSONALIZACIÓN DE COLORES ---
 const btnColors = document.getElementById('btn-colors');
 btnColors.addEventListener('click', () => {
@@ -212,7 +227,7 @@ function agregarTareaALaPantalla(tarea, idLista) {
         const dateSpan = document.createElement('span');
         dateSpan.className = 'task-date';
         const fecha = new Date(tarea.dueAt);
-        dateSpan.textContent = `📅 ${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+        dateSpan.textContent = `${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
         contentDiv.appendChild(dateSpan);
     }
 

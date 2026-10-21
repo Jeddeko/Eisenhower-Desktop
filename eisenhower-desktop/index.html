@@ -39,12 +39,13 @@
         </header>
         
         <div class="matrix-grid">
+            <!-- CUADRANTE DO -->
             <div class="quadrant do" id="zone-do">
                 <div class="quadrant-header">
-                    <h2 contenteditable="true">Hacer (Urgente e Importante)</h2>
-                    <button class="btn-add" onclick="abrirFormulario('do')">+</button>
+                    <h2 contenteditable="true">Hazlo</h2>
                 </div>
                 <ul id="lista-do" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'do')"></ul>
+                <button class="btn-add-bottom" onclick="abrirFormulario('do')">+ Añadir</button>
                 <div class="completed-section">
                     <div class="completed-header" onclick="toggleCompletadas('do')">
                         <span>Completadas</span>
@@ -54,12 +55,13 @@
                 </div>
             </div>
             
+            <!-- CUADRANTE SCHEDULE -->
             <div class="quadrant schedule" id="zone-schedule">
                 <div class="quadrant-header">
-                    <h2 contenteditable="true">Planificar (No Urgente, Importante)</h2>
-                    <button class="btn-add" onclick="abrirFormulario('schedule')">+</button>
+                    <h2 contenteditable="true">Planifica</h2>
                 </div>
                 <ul id="lista-schedule" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'schedule')"></ul>
+                <button class="btn-add-bottom" onclick="abrirFormulario('schedule')">+ Añadir</button>
                 <div class="completed-section">
                     <div class="completed-header" onclick="toggleCompletadas('schedule')">
                         <span>Completadas</span>
@@ -69,12 +71,13 @@
                 </div>
             </div>
             
+            <!-- CUADRANTE DELEGATE -->
             <div class="quadrant delegate" id="zone-delegate">
                 <div class="quadrant-header">
-                    <h2 contenteditable="true">Delegar (Urgente, No Importante)</h2>
-                    <button class="btn-add" onclick="abrirFormulario('delegate')">+</button>
+                    <h2 contenteditable="true">Delega</h2>
                 </div>
                 <ul id="lista-delegate" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'delegate')"></ul>
+                <button class="btn-add-bottom" onclick="abrirFormulario('delegate')">+ Añadir</button>
                 <div class="completed-section">
                     <div class="completed-header" onclick="toggleCompletadas('delegate')">
                         <span>Completadas</span>
@@ -84,12 +87,13 @@
                 </div>
             </div>
             
+            <!-- CUADRANTE ELIMINATE -->
             <div class="quadrant eliminate" id="zone-eliminate">
                 <div class="quadrant-header">
-                    <h2 contenteditable="true">Eliminar (No Urgente, No Importante)</h2>
-                    <button class="btn-add" onclick="abrirFormulario('eliminate')">+</button>
+                    <h2 contenteditable="true">Elimina</h2>
                 </div>
                 <ul id="lista-eliminate" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'eliminate')"></ul>
+                <button class="btn-add-bottom" onclick="abrirFormulario('eliminate')">+ Añadir</button>
                 <div class="completed-section">
                     <div class="completed-header" onclick="toggleCompletadas('eliminate')">
                         <span>Completadas</span>
@@ -106,22 +110,19 @@
             <h2 id="modal-title">Nueva Tarea</h2>
             <input type="hidden" id="edit-task-id"> 
             <input type="text" id="task-title" placeholder="¿Qué tienes que hacer?" autocomplete="off">
-            
-            <label class="input-label">Fecha y Hora límite (Opcional):</label>
+            <label class="input-label">Fecha límite (Opcional):</label>
             <input type="text" id="task-date" placeholder="Selecciona fecha y hora...">
-
             <div class="reminders-section">
-                <label class="input-label">Recordatorios / Alertas:</label>
+                <label class="input-label">Recordatorios:</label>
                 <div class="reminder-input-group">
-                    <input type="text" id="reminder-date" placeholder="Selecciona fecha y hora...">
+                    <input type="text" id="reminder-date" placeholder="Selecciona fecha...">
                     <button class="btn-add-reminder" onclick="agregarRecordatorio()">+</button>
                 </div>
                 <ul id="lista-recordatorios" class="reminders-list"></ul>
             </div>
-            
             <div class="modal-actions">
                 <button class="btn-secondary" onclick="cerrarFormulario()">Cancelar</button>
-                <button id="btn-save-task" class="btn-primary">Guardar Tarea</button>
+                <button id="btn-save-task" class="btn-primary">Guardar</button>
             </div>
         </div>
     </div>
@@ -129,13 +130,13 @@
     <div id="modal-colors" class="modal">
         <div class="modal-content">
             <h2>Personalizar Colores</h2>
-            <label class="input-label">Color Cuadrante 1 (Hacer):</label>
+            <label class="input-label">Color Cuadrante 1 (Hazlo):</label>
             <input type="color" id="color-do" value="#e53935">
-            <label class="input-label">Color Cuadrante 2 (Planificar):</label>
+            <label class="input-label">Color Cuadrante 2 (Planifica):</label>
             <input type="color" id="color-schedule" value="#fb8c00">
-            <label class="input-label">Color Cuadrante 3 (Delegar):</label>
+            <label class="input-label">Color Cuadrante 3 (Delega):</label>
             <input type="color" id="color-delegate" value="#1e88e5">
-            <label class="input-label">Color Cuadrante 4 (Eliminar):</label>
+            <label class="input-label">Color Cuadrante 4 (Elimina):</label>
             <input type="color" id="color-eliminate" value="#43a047">
             <div class="modal-actions">
                 <button class="btn-secondary" onclick="cerrarColores()">Cerrar</button>
