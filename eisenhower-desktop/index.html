@@ -24,12 +24,13 @@
     </div>
 
     <div class="widget-container" id="app-container" style="display: none;">
-        <!-- NUEVA BARRA SUPERIOR -->
         <header class="top-bar">
-            <div class="drag-region">
+            <div class="drag-region" data-tauri-drag-region>
                 <h1>Matriz de Eisenhower</h1>
             </div>
             <div class="window-controls">
+                <button id="btn-font-down" title="Achicar letra">A-</button>
+                <button id="btn-font-up" title="Agrandar letra">A+</button>
                 <button id="btn-theme" title="Cambiar Modo">☀️</button>
                 <button id="btn-colors" title="Personalizar Colores">🎨</button>
                 <button id="btn-pin" title="Fijar sobre otras ventanas">📌</button>
@@ -38,7 +39,6 @@
         </header>
         
         <div class="matrix-grid">
-            <!-- CUADRANTE DO -->
             <div class="quadrant do" id="zone-do">
                 <div class="quadrant-header">
                     <h2 contenteditable="true">Hacer (Urgente e Importante)</h2>
@@ -54,7 +54,6 @@
                 </div>
             </div>
             
-            <!-- CUADRANTE SCHEDULE -->
             <div class="quadrant schedule" id="zone-schedule">
                 <div class="quadrant-header">
                     <h2 contenteditable="true">Planificar (No Urgente, Importante)</h2>
@@ -70,7 +69,6 @@
                 </div>
             </div>
             
-            <!-- CUADRANTE DELEGATE -->
             <div class="quadrant delegate" id="zone-delegate">
                 <div class="quadrant-header">
                     <h2 contenteditable="true">Delegar (Urgente, No Importante)</h2>
@@ -86,7 +84,6 @@
                 </div>
             </div>
             
-            <!-- CUADRANTE ELIMINATE -->
             <div class="quadrant eliminate" id="zone-eliminate">
                 <div class="quadrant-header">
                     <h2 contenteditable="true">Eliminar (No Urgente, No Importante)</h2>
@@ -104,7 +101,6 @@
         </div>
     </div>
 
-    <!-- POPUP DE CREACIÓN/EDICIÓN -->
     <div id="modal-form" class="modal">
         <div class="modal-content">
             <h2 id="modal-title">Nueva Tarea</h2>
@@ -130,23 +126,17 @@
         </div>
     </div>
 
-    <!-- POPUP DE AJUSTES DE COLOR -->
     <div id="modal-colors" class="modal">
         <div class="modal-content">
             <h2>Personalizar Colores</h2>
-            
             <label class="input-label">Color Cuadrante 1 (Hacer):</label>
             <input type="color" id="color-do" value="#e53935">
-
             <label class="input-label">Color Cuadrante 2 (Planificar):</label>
             <input type="color" id="color-schedule" value="#fb8c00">
-
             <label class="input-label">Color Cuadrante 3 (Delegar):</label>
             <input type="color" id="color-delegate" value="#1e88e5">
-
             <label class="input-label">Color Cuadrante 4 (Eliminar):</label>
             <input type="color" id="color-eliminate" value="#43a047">
-
             <div class="modal-actions">
                 <button class="btn-secondary" onclick="cerrarColores()">Cerrar</button>
                 <button id="btn-save-colors" class="btn-primary">Guardar Colores</button>

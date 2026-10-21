@@ -3,7 +3,7 @@ import {
     signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut 
 } from "firebase/auth";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { getCurrentWindow } from '@tauri-apps/api/window'; // NUEVO: API de ventana
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
@@ -16,9 +16,8 @@ let recordatoriosTemporales = [];
 let editingTaskId = null; 
 let draggedElement = null;
 
-const appWindow = getCurrentWindow(); // NUEVO
+const appWindow = getCurrentWindow();
 
-// Elementos UI
 const authContainer = document.getElementById('auth-container');
 const appContainer = document.getElementById('app-container');
 const emailInput = document.getElementById('email');
@@ -31,14 +30,12 @@ const modalForm = document.getElementById('modal-form');
 const modalColors = document.getElementById('modal-colors');
 
 // --- CONFIGURACIÓN DE VENTANA Y TEMA ---
-// Botón Fijar arriba
 document.getElementById('btn-pin').addEventListener('click', async (e) => {
     const isPinned = await appWindow.isAlwaysOnTop();
     await appWindow.setAlwaysOnTop(!isPinned);
     e.target.classList.toggle('active');
 });
 
-// Modo Claro / Oscuro
 const btnTheme = document.getElementById('btn-theme');
 btnTheme.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
@@ -47,7 +44,6 @@ btnTheme.addEventListener('click', () => {
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
 });
 
-// Cargar tema guardado
 if (localStorage.getItem('theme') === 'light') {
     document.body.classList.add('light-mode');
     btnTheme.textContent = '🌙';
@@ -56,13 +52,11 @@ if (localStorage.getItem('theme') === 'light') {
 // --- PERSONALIZACIÓN DE COLORES ---
 const btnColors = document.getElementById('btn-colors');
 btnColors.addEventListener('click', () => {
-    // Cargar valores actuales de CSS
     const style = getComputedStyle(document.documentElement);
     document.getElementById('color-do').value = rgbToHex(style.getPropertyValue('--color-do').trim());
     document.getElementById('color-schedule').value = rgbToHex(style.getPropertyValue('--color-schedule').trim());
     document.getElementById('color-delegate').value = rgbToHex(style.getPropertyValue('--color-delegate').trim());
     document.getElementById('color-eliminate').value = rgbToHex(style.getPropertyValue('--color-eliminate').trim());
-    
     modalColors.style.display = 'flex';
 });
 
@@ -79,7 +73,6 @@ document.getElementById('btn-save-colors').addEventListener('click', () => {
     document.documentElement.style.setProperty('--color-delegate', cDel);
     document.documentElement.style.setProperty('--color-eliminate', cElim);
 
-    // Guardar en localStorage
     localStorage.setItem('color-do', cDo);
     localStorage.setItem('color-schedule', cSched);
     localStorage.setItem('color-delegate', cDel);
@@ -88,13 +81,11 @@ document.getElementById('btn-save-colors').addEventListener('click', () => {
     cerrarColores();
 });
 
-// Cargar colores guardados
 ['do', 'schedule', 'delegate', 'eliminate'].forEach(c => {
     const saved = localStorage.getItem(`color-${c}`);
     if (saved) document.documentElement.style.setProperty(`--color-${c}`, saved);
 });
 
-// Utilidad para convertir rgb a hex para el input color
 function rgbToHex(rgb) {
     if (rgb.startsWith('#')) return rgb;
     const colors = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
@@ -119,7 +110,7 @@ modalForm.addEventListener('mousedown', (e) => {
     if (e.target === modalForm) cerrarFormulario();
 });
 
-// --- AUTENTICACIÓN Y FIREBASE (Sin cambios) ---
+// --- AUTENTICACIÓN ---
 btnLogin.addEventListener('click', () => {
     signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
         .then(() => authMessage.textContent = "")
@@ -138,7 +129,7 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         currentUser = user;
         authContainer.style.display = 'none';
-        appContainer.style.display = 'flex'; // flex para que ocupe el 90vh
+        appContainer.style.display = 'flex';
         cargarTareas(user.uid);
     } else {
         currentUser = null;
@@ -414,3 +405,23 @@ async function guardarEnFirebase(arrayDeTareas) {
     const docRef = doc(db, 'users', currentUser.uid, 'tasks', 'sync_data');
     await updateDoc(docRef, { tasks: arrayDeTareas });
 }
+
+// --- AJUSTE DE TAMAÑO DE LETRA ---
+let currentFontSize = parseInt(localStorage.getItem('fontSize')) || 14;
+document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
+
+document.getElementById('btn-font-up').addEventListener('click', () => {
+    if (currentFontSize < 24) {
+        currentFontSize += 2;
+        document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
+        localStorage.setItem('fontSize', currentFontSize);
+    }
+});
+
+document.getElementById('btn-font-down').addEventListener('click', () => {
+    if (currentFontSize > 10) {
+        currentFontSize -= 2;
+        document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
+        localStorage.setItem('fontSize', currentFontSize);
+    }
+});
