@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eisenhower Widget</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.css">
+    <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+
+    <div id="auth-container" class="auth-container">
+        <h1>Matriz de Eisenhower</h1>
+        <div class="auth-box">
+            <h2 id="auth-title">Iniciar Sesión</h2>
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button id="btn-login">Entrar</button>
+            <button id="btn-signup" class="btn-secondary">Crear cuenta nueva</button>
+            <p id="auth-message"></p>
+        </div>
+    </div>
+
+    <div class="widget-container" id="app-container" style="display: none;">
+        <!-- NUEVA BARRA SUPERIOR -->
+        <header class="top-bar">
+            <div class="drag-region">
+                <h1>Matriz de Eisenhower</h1>
+            </div>
+            <div class="window-controls">
+                <button id="btn-theme" title="Cambiar Modo">☀️</button>
+                <button id="btn-colors" title="Personalizar Colores">🎨</button>
+                <button id="btn-pin" title="Fijar sobre otras ventanas">📌</button>
+                <button id="btn-logout" class="btn-danger" style="margin-left: 10px;">Salir</button>
+            </div>
+        </header>
+        
+        <div class="matrix-grid">
+            <!-- CUADRANTE DO -->
+            <div class="quadrant do" id="zone-do">
+                <div class="quadrant-header">
+                    <h2 contenteditable="true">Hacer (Urgente e Importante)</h2>
+                    <button class="btn-add" onclick="abrirFormulario('do')">+</button>
+                </div>
+                <ul id="lista-do" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'do')"></ul>
+                <div class="completed-section">
+                    <div class="completed-header" onclick="toggleCompletadas('do')">
+                        <span>Completadas</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <ul id="lista-completadas-do" class="completed-list" style="display: none;"></ul>
+                </div>
+            </div>
+            
+            <!-- CUADRANTE SCHEDULE -->
+            <div class="quadrant schedule" id="zone-schedule">
+                <div class="quadrant-header">
+                    <h2 contenteditable="true">Planificar (No Urgente, Importante)</h2>
+                    <button class="btn-add" onclick="abrirFormulario('schedule')">+</button>
+                </div>
+                <ul id="lista-schedule" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'schedule')"></ul>
+                <div class="completed-section">
+                    <div class="completed-header" onclick="toggleCompletadas('schedule')">
+                        <span>Completadas</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <ul id="lista-completadas-schedule" class="completed-list" style="display: none;"></ul>
+                </div>
+            </div>
+            
+            <!-- CUADRANTE DELEGATE -->
+            <div class="quadrant delegate" id="zone-delegate">
+                <div class="quadrant-header">
+                    <h2 contenteditable="true">Delegar (Urgente, No Importante)</h2>
+                    <button class="btn-add" onclick="abrirFormulario('delegate')">+</button>
+                </div>
+                <ul id="lista-delegate" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'delegate')"></ul>
+                <div class="completed-section">
+                    <div class="completed-header" onclick="toggleCompletadas('delegate')">
+                        <span>Completadas</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <ul id="lista-completadas-delegate" class="completed-list" style="display: none;"></ul>
+                </div>
+            </div>
+            
+            <!-- CUADRANTE ELIMINATE -->
+            <div class="quadrant eliminate" id="zone-eliminate">
+                <div class="quadrant-header">
+                    <h2 contenteditable="true">Eliminar (No Urgente, No Importante)</h2>
+                    <button class="btn-add" onclick="abrirFormulario('eliminate')">+</button>
+                </div>
+                <ul id="lista-eliminate" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event, 'eliminate')"></ul>
+                <div class="completed-section">
+                    <div class="completed-header" onclick="toggleCompletadas('eliminate')">
+                        <span>Completadas</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <ul id="lista-completadas-eliminate" class="completed-list" style="display: none;"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP DE CREACIÓN/EDICIÓN -->
+    <div id="modal-form" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Nueva Tarea</h2>
+            <input type="hidden" id="edit-task-id"> 
+            <input type="text" id="task-title" placeholder="¿Qué tienes que hacer?" autocomplete="off">
+            
+            <label class="input-label">Fecha y Hora límite (Opcional):</label>
+            <input type="text" id="task-date" placeholder="Selecciona fecha y hora...">
+
+            <div class="reminders-section">
+                <label class="input-label">Recordatorios / Alertas:</label>
+                <div class="reminder-input-group">
+                    <input type="text" id="reminder-date" placeholder="Selecciona fecha y hora...">
+                    <button class="btn-add-reminder" onclick="agregarRecordatorio()">+</button>
+                </div>
+                <ul id="lista-recordatorios" class="reminders-list"></ul>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="cerrarFormulario()">Cancelar</button>
+                <button id="btn-save-task" class="btn-primary">Guardar Tarea</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP DE AJUSTES DE COLOR -->
+    <div id="modal-colors" class="modal">
+        <div class="modal-content">
+            <h2>Personalizar Colores</h2>
+            
+            <label class="input-label">Color Cuadrante 1 (Hacer):</label>
+            <input type="color" id="color-do" value="#e53935">
+
+            <label class="input-label">Color Cuadrante 2 (Planificar):</label>
+            <input type="color" id="color-schedule" value="#fb8c00">
+
+            <label class="input-label">Color Cuadrante 3 (Delegar):</label>
+            <input type="color" id="color-delegate" value="#1e88e5">
+
+            <label class="input-label">Color Cuadrante 4 (Eliminar):</label>
+            <input type="color" id="color-eliminate" value="#43a047">
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="cerrarColores()">Cerrar</button>
+                <button id="btn-save-colors" class="btn-primary">Guardar Colores</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

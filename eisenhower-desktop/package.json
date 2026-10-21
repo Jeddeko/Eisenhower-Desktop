@@ -1,0 +1,17 @@
+{
+  "name": "eisenhower-desktop",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.12.4",
+    "firebase": "^13.0.0",
+    "flatpickr": "^4.6.13"
+  }
+}
